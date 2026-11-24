@@ -14,6 +14,11 @@ ENTRY = "I hallucinated a second deadline, hit that one perfectly, and now I can
 
 
 def main() -> None:
+    # Fail loudly instead of silently writing an invalid entry: the gate
+    # requires one line, 1-160 UTF-8 characters, not only whitespace.
+    assert ENTRY == ENTRY.strip() and "\n" not in ENTRY, "entry must be a single line"
+    assert 1 <= len(ENTRY) <= 160, "entry must be 1-160 characters"
+    assert ENTRY.strip(), "entry must not be only whitespace"
     out_dir = sys.argv[1] if len(sys.argv) > 1 else "/output"
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, "entry.txt")
